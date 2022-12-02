@@ -1,24 +1,24 @@
 #include <Servo.h>
 Servo head;
 
-#define SERVO_PIN     9  //servo connect to D9
+#define SERVO_PIN     9  
 
 //Define L298N Dual H-Bridge Motor Controller Pins
-#define RightDirectPin1  12    //Right Motor direction pin 1 to MODEL-X IN1 grey
-#define RightDirectPin2  11    //Right Motor direction pin 1 to MODEL-X IN2 yellow
-#define speedPinL 6    //Left PWM pin connect MODEL-X ENB brown
-#define LeftDirectPin1  7    //Left Motor direction pin 1 to MODEL-X IN3 green
-#define LeftDirectPin2  8   //Left Motor direction pin 1 to MODEL-X IN4 white
-#define speedPinR 3    // RIGHT PWM pin connect MODEL-X ENA blue
+#define RightDirectPin1  12    //Right Motor direction pin 1 
+#define RightDirectPin2  11    //Right Motor direction pin 1
+#define speedPinL 6    //Left PWM pin 
+#define LeftDirectPin1  7    //Left Motor direction pin 1
+#define LeftDirectPin2  8   //Left Motor direction pin 1 
+#define speedPinR 3    // Right PWM pin 
 
 #define Echo_PIN 2
 #define Trig_PIN 10
 
-#define LFSensor_0 A0  //OLD D3
+#define LFSensor_0 A0  
 #define LFSensor_1 A1
 #define LFSensor_2 A2
 #define LFSensor_3 A3
-#define LFSensor_4 A4  //OLD D10
+#define LFSensor_4 A4  
 
 int sensor[5]={0, 0, 0, 0, 0};
 
@@ -71,7 +71,7 @@ void go_Back()  //Reverse
   digitalWrite(LeftDirectPin2,HIGH);
   set_Motorspeed(SPEED,SPEED);
 }
-void stop_Stop()    //Stop
+void stop_Stop()   
 {
   digitalWrite(RightDirectPin1, LOW);
   digitalWrite(RightDirectPin2,LOW);
@@ -141,13 +141,7 @@ int watch(){
   digitalWrite(Trig_PIN,LOW);
   long echo_distance2=pulseIn(Echo_PIN,HIGH);
   echo_distance2=echo_distance2*0.01657; //how far away is the object in cm
-  /*digitalWrite(Trig_PIN,LOW);
-  delayMicroseconds(2);                                                                              
-  digitalWrite(Trig_PIN,HIGH);
-  delayMicroseconds(10);
-  digitalWrite(Trig_PIN,LOW);
-  long echo_distance3=pulseIn(Echo_PIN,HIGH);
-  echo_distance3=echo_distance3*0.01657; //how far away is the object in cm*/
+ 
   long echo_distance = (echo_distance1+echo_distance2)/2;
   return round(echo_distance);
 }
@@ -174,7 +168,6 @@ void auto_avoidance(){
   go_Right();
   set_Motorspeed(160,160);
   delay(740);
-  //stop_Stop();
 }
 
 void read_sensor_values(){
@@ -183,17 +176,6 @@ void read_sensor_values(){
   sensor[2] = !digitalRead(LFSensor_2);
   sensor[3] = !digitalRead(LFSensor_3);
   sensor[4] = !digitalRead(LFSensor_4);
-
-  /*Serial.print(sensor[0]);
-  Serial.print(" ");
-  Serial.print(sensor[1]);
-  Serial.print(" ");
-  Serial.print(sensor[2]);
-  Serial.print(" ");
-  Serial.print(sensor[3]);
-  Serial.print(" ");
-  Serial.println(sensor[4]);*/
-  
 
   if((sensor[0] == 0) && (sensor[1] == 0) && (sensor[2] == 0) && (sensor[3] == 0) && (sensor[4] == 1)){
     error = 4;
@@ -237,7 +219,6 @@ void calculate_PID(){
   E = E + error;
   u = Kp*error + Ki*E + Kd*e_dot;
   e_old = error;
-  //Serial.println(PID_value);
 }
 
 void auto_tracking(){
@@ -252,11 +233,11 @@ void auto_tracking(){
     PWA_right = 0;
   }
   
-  /*if(millis()-oldtime > 5000){
+  if(millis()-oldtime > 5000){
     oldtime = millis();
     if((sensor[0] == 0) && (sensor[1] == 0) && (sensor[2] == 0) && (sensor[3] == 0) && (sensor[4] == 0)){
     PWA_left = 0;
     PWA_right = 0;
     }
-  }*/
+  }
 }
